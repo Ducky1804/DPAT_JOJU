@@ -1,4 +1,5 @@
 using Model;
+using Validator;
 
 namespace DPAT_JOJU.Commands;
 
@@ -6,6 +7,6 @@ public class ValidateCommand(Diagram diagram) : ICommand<Boolean>
 {
     public Boolean Execute()
     {
-        return false;
+        return new ValidationFacade().ValidateDiagram(diagram);
     }
 }

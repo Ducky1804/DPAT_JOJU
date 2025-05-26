@@ -2,14 +2,16 @@
 
 public class Transition : Identifiable
 {
-    public State Source { get; set; }
-    public State Destination { get; set; }
+    public string Source { get; set; }
+    public string Destination { get; set; }
     public Trigger Trigger { get; set; }
+    public String Guard { get; set; }
     
-    public Transition(string id, State source, State destination, Trigger trigger) : base(id)
+    public Transition(string id, string source, string destination, Trigger trigger, string guard) : base(id)
     {
         this.Source = source;
         this.Destination = destination;
         this.Trigger = trigger;
+        this.Guard = guard;
     }
 }

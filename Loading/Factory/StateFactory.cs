@@ -8,25 +8,30 @@ public class StateFactory : IFactory<State>
 {
     public State Create(Diagram diagram, string input)
     {
-        var match = Regex.Match(input, @"^STATE\s+([a-zA-Z]+)\s+([a-zA-Z_]+)\s+""([^""]+)""\s+:\s+(INITIAL|SIMPLE|COMPOUND|FINAL)\s*;");
-            var (id, parent, name, type) = (
-                match.Groups[1].Value,
-                match.Groups[2].Value,
-                match.Groups[3].Value,
-                match.Groups[4].Value
-            );
+        var match = Regex.Match(input, @"^STATE\s+(\w+)\s+(\w+)\s+""(.*?)""\s+:\s+(\w+);");
 
-            StateBuilder builder = new();
-            builder.Id = id;
-            builder.Name = name;
-            builder.Type = type;
+        if (!match.Success)
+        {
+            throw new ArgumentException($"Input is not a valid STATE line: {input}");
+        }
 
-            if (parent != "_")
-            {
-                builder.Parent = diagram.GetState(parent);
-            }
+        var (id, parent, name, type) = (
+            match.Groups[1].Value,
+            match.Groups[2].Value,
+            match.Groups[3].Value,
+            match.Groups[4].Value
+        );
+
+        StateBuilder builder = new();
+        builder.Id = id;
+        builder.Name = name;
+        builder.Type = type;
+
+        if (parent != "_")
+        {
+            builder.Parent = diagram.GetState(parent).ValueOrDefault();
+        }
         
-            return builder.Build();
-        
+        return builder.Build();
     }
 }

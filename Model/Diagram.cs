@@ -1,3 +1,5 @@
+using Model.Utils;
+
 namespace Model;
 
 public class Diagram
@@ -5,14 +7,29 @@ public class Diagram
     public List<State> States { get; set; } = new();
     public List<Trigger> Triggers { get; set; } = new();
     public List<Action> Actions { get; set; } = new();
+    public List<Transition> Transitions { get; set; } = new();
 
-    public State GetState(string identifier)
+    public Maybe<State> GetState(string? identifier)
     {
+        if (identifier == null) return Maybe<State>.None();
+        
         foreach (var state in States)
         {
-            if (state.Id == identifier) return state;
+            if (state.Id == identifier) return Maybe<State>.Of(state);
         }
         
-        return null;
+        return Maybe<State>.None();
+    }
+
+    public Maybe<Trigger> GetTrigger(string? identifier)
+    {
+        if (identifier == null) return Maybe<Trigger>.None();
+
+        foreach (Trigger trigger in Triggers)
+        {
+            if (trigger.Id == identifier) return Maybe<Trigger>.Of(trigger);
+        }
+        
+        return Maybe<Trigger>.None();
     }
 }

@@ -16,6 +16,7 @@ public class AbstractFactory
             { "STATE", typeof(StateFactory) },
             { "TRIGGER", typeof(TriggerFactory) },
             { "ACTION", typeof(ActionFactory) },
+            { "TRANSITION", typeof(TransitionFactory) },
         };
     }
 
@@ -46,7 +47,6 @@ public class AbstractFactory
 
                 if (createdObject is State state)
                 {
-                    PrintStateInfo(state);
                     diagram.States.Add(state);
                 }
 
@@ -57,18 +57,12 @@ public class AbstractFactory
 
                 if (createdObject is Action action)
                     diagram.Actions.Add(action);
+                
+                if(createdObject is Transition transition)
+                    diagram.Transitions.Add(transition);
             }
         }
 
         return diagram;
-    }
-
-    private void PrintStateInfo(State state)
-    {
-        Console.WriteLine($"ID: {state.Id}");
-        Console.WriteLine($"Name: {state.Name}");
-        Console.WriteLine($"Type: {state.GetType().Name}");
-        Console.WriteLine($"Parent: {(state.ParentState != null ? state.ParentState.Name : "No parent")}");
-        Console.WriteLine("-=-=-=-=-=-=-=-=-=-");
     }
 }

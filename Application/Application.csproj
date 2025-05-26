@@ -11,6 +11,18 @@
     <ItemGroup>
       <ProjectReference Include="..\Loading\Loading.csproj" />
       <ProjectReference Include="..\Model\Model.csproj" />
+      <ProjectReference Include="..\Validator\Validator.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Resources\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Resources\" />
     </ItemGroup>
 
 </Project>
