@@ -12,7 +12,7 @@ class Application
     {
         ICommand<Diagram> loadCommand = new LoadCommand(fileContent);
         Diagram diagram = loadCommand.Execute();
-
+        
         ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
         Boolean valid = validateCommand.Execute();
         

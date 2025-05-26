@@ -1,6 +1,7 @@
 using Loading.Factory;
 using Model;
 using System.Reflection;
+using Action = Model.Action;
 
 namespace Loading;
 
@@ -12,8 +13,9 @@ public class AbstractFactory
     {
         factories = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
         {
-            { "STATE", typeof(StateFactory) }
-            // later hier eenvoudig meer toevoegen
+            { "STATE", typeof(StateFactory) },
+            { "TRIGGER", typeof(TriggerFactory) },
+            { "ACTION", typeof(ActionFactory) },
         };
     }
 
@@ -23,7 +25,7 @@ public class AbstractFactory
 
         foreach (string line in content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
         {
-            if (line.StartsWith("#")) 
+            if (line.StartsWith("#"))
                 continue;
 
             var tokens = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -36,8 +38,9 @@ public class AbstractFactory
             {
                 var factoryInstance = Activator.CreateInstance(factoryType);
                 var createMethod = factoryType.GetMethod("Create", new[] { typeof(Diagram), typeof(string) });
-                if (createMethod == null) 
-                    throw new InvalidOperationException($"Factory {factoryType.Name} heeft geen juiste Create methode.");
+                if (createMethod == null)
+                    throw new InvalidOperationException(
+                        $"Factory {factoryType.Name} heeft geen juiste Create methode.");
 
                 var createdObject = createMethod.Invoke(factoryInstance, new object[] { diagram, line });
 
@@ -46,6 +49,14 @@ public class AbstractFactory
                     PrintStateInfo(state);
                     diagram.States.Add(state);
                 }
+
+                if (createdObject is Trigger trigger)
+                {
+                    diagram.Triggers.Add(trigger);
+                }
+
+                if (createdObject is Action action)
+                    diagram.Actions.Add(action);
             }
         }
 
