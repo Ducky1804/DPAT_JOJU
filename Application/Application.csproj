@@ -8,4 +8,9 @@
         <RootNamespace>DPAT_JOJU</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Loading\Loading.csproj" />
+      <ProjectReference Include="..\Model\Model.csproj" />
+    </ItemGroup>
+
 </Project>
