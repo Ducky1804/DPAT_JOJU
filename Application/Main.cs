@@ -1,5 +1,7 @@
 ﻿using DPAT_JOJU.Commands;
 using Model;
+using View;
+using View.Printer;
 
 namespace DPAT_JOJU;
 
@@ -8,16 +10,28 @@ class Application
 
     public static void Main(string[] args)
     {
-        string baseDir = AppContext.BaseDirectory;
-        string? fileName = "";
+        IPrinter printer = new ConsolePrinter();
+        IPrinter errorPrinter = new ErrorConsolePrinter();
+        
+        InitialRenderer menuRenderer = new InitialRenderer();
+        printer.Print(menuRenderer.Render());
+        
+        IInputReader inputReader = new ConsoleInputReader();
+        string file = inputReader.ReadInput();
 
-        if (string.IsNullOrWhiteSpace(fileName))
-            fileName = "invalid_deterministic3";
-            
-        string filePath = Path.Combine(baseDir, "Resources", fileName + ".fsm");
+        string fileContent = "";
+        try
+        {
 
-        Console.WriteLine("Reading: " + filePath);
-        string fileContent = File.ReadAllText(filePath);
+            ICommand<String> fileReaderCommand = new FileReadCommand(file);
+            fileContent = fileReaderCommand.Execute();
+            Console.WriteLine(fileContent);
+        }
+        catch (Exception e)
+        {
+            Console.Clear();
+            errorPrinter.Print(new NoFileError(file).Render());
+        }
         
         ICommand<Diagram> loadCommand = new LoadCommand(fileContent);
         Diagram diagram = loadCommand.Execute();
@@ -27,8 +41,8 @@ class Application
 
         if (!valid)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Validation is not valid!");
+            Console.Clear();
+            errorPrinter.Print(new ValidationError().Render());
             return;
         }
         
