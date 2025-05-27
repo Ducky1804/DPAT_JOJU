@@ -13,4 +13,30 @@ public class BoxedContentPrinter(ConsoleColor color = ConsoleColor.White) : Cons
             base.Print(line);
         }
     }
+    
+    public void Print(string content, string? description, ConsoleColor header = ConsoleColor.Blue, ConsoleColor descriptionColor = ConsoleColor.Red )
+    {
+        List<string> lines;
+
+        if (description == null)
+        {
+            this.Print(content);
+            return;
+        }
+        else
+        {
+            lines = new Rectangle().DrawConsoleRectangle(content, description);
+            bool separatorReached = false;
+
+            foreach (var line in lines)
+            {
+                if (line.StartsWith("├")) separatorReached = true;
+
+                Console.ForegroundColor = separatorReached ? descriptionColor : header;
+                Console.WriteLine(line);
+            }
+        }
+
+        Console.ResetColor();
+    }
 }

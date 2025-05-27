@@ -6,7 +6,6 @@ public class Rectangle
     {
         var lines = content.Split('\n');
         int maxLength = lines.Max(line => line.Replace("\r", "").Length);
-        int totalWidth = maxLength + 4;
 
         List<string> result = new();
         result.Add("┌" + new string('─', maxLength + 2) + "┐");
@@ -21,5 +20,35 @@ public class Rectangle
         result.Add("└" + new string('─', maxLength + 2) + "┘");
         return result;
     }
+    
+    public List<string> DrawConsoleRectangle(string header, string description)
+    {
+        var descriptionLines = description.Split('\n').Select(line => line.Replace("\r", "")).ToList();
+        var lines = new List<string> { header.Replace("\r", "") };
+        lines.AddRange(descriptionLines);
+
+        int maxLength = lines.Max(line => line.Length);
+
+        List<string> result = new();
+        result.Add("┌" + new string('─', maxLength + 2) + "┐");
+
+        // Header line
+        string headerLine = header.Replace("\r", "").PadRight(maxLength);
+        result.Add($"│ {headerLine} │");
+
+        // Separator line
+        result.Add("├" + new string('─', maxLength + 2) + "┤");
+
+        // Description lines
+        foreach (string line in descriptionLines)
+        {
+            string paddedLine = line.PadRight(maxLength);
+            result.Add($"│ {paddedLine} │");
+        }
+
+        result.Add("└" + new string('─', maxLength + 2) + "┘");
+        return result;
+    }
+
 }
 

@@ -8,4 +8,9 @@ public class Action : Describable
     {
         Type = type;
     }
+    
+    public void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }

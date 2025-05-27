@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using Loading.Builder;
 using Model;
@@ -27,11 +28,18 @@ public class StateFactory : IFactory<State>
         builder.Name = name;
         builder.Type = type;
 
+        State newState = builder.Build();
+
         if (parent != "_")
         {
-            builder.Parent = diagram.GetState(parent).ValueOrDefault();
+            var parentState = diagram.GetState(parent).ValueOrDefault();
+            parentState?.AddChild(newState);
         }
-        
-        return builder.Build();
+        else
+        {
+            diagram.States.Add(newState); // toegevoegde methode
+        }
+
+        return newState;
     }
 }

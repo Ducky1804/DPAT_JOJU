@@ -35,6 +35,7 @@ public class StateBuilder : IBuilder<State>
 
     public State Build()
     {
+        
         State state = _type switch
         {
             "COMPOUND" => new CompoundState(_id, _name),

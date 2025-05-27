@@ -22,24 +22,28 @@ class Application
         string fileContent = "";
         try
         {
+            if (string.IsNullOrWhiteSpace(file))
+            {
+                file = "example_user_account";
+            }
 
             ICommand<String> fileReaderCommand = new FileReadCommand(file);
             fileContent = fileReaderCommand.Execute();
-            Console.WriteLine(fileContent);
         }
         catch (Exception e)
         {
             Console.Clear();
             errorPrinter.Print(new NoFileError(file).Render());
+            return;
         }
         
-        ICommand<Diagram> loadCommand = new LoadCommand(fileContent);
+        ICommand<Diagram> loadCommand = new LoadCommand(file, fileContent);
         Diagram diagram = loadCommand.Execute();
         
-        ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
-        Boolean valid = validateCommand.Execute();
+        //ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
+        //Boolean valid = validateCommand.Execute();
 
-        if (!valid)
+        if (false)
         {
             Console.Clear();
             errorPrinter.Print(new ValidationError().Render());
@@ -47,6 +51,6 @@ class Application
         }
         
         ICommand<Boolean> viewCommand = new ViewCommand(diagram);
-        Boolean view =  viewCommand.Execute();
+        viewCommand.Execute();
     }
 }

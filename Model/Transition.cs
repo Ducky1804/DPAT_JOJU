@@ -14,4 +14,9 @@ public class Transition : Identifiable
         this.Trigger = trigger;
         this.Guard = guard;
     }
+    
+    public void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }

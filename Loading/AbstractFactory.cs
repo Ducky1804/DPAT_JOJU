@@ -1,6 +1,7 @@
 using Loading.Factory;
 using Model;
 using System.Reflection;
+using Model.Utils;
 using Action = Model.Action;
 
 namespace Loading;
@@ -20,9 +21,12 @@ public class AbstractFactory
         };
     }
 
-    public Diagram CreateDiagram(string content)
+    public Diagram CreateDiagram(string name, string content)
     {
-        var diagram = new Diagram();
+        var diagram = new Diagram()
+        {
+            Name = name,
+        };
 
         foreach (string line in content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
         {
@@ -44,19 +48,24 @@ public class AbstractFactory
                         $"Factory {factoryType.Name} heeft geen juiste Create methode.");
 
                 var createdObject = createMethod.Invoke(factoryInstance, new object[] { diagram, line });
-
-                if (createdObject is State state)
-                {
-                    diagram.States.Add(state);
-                }
-
+                
                 if (createdObject is Trigger trigger)
                 {
                     diagram.Triggers.Add(trigger);
                 }
 
                 if (createdObject is Action action)
-                    diagram.Actions.Add(action);
+                {
+                    Maybe<State> maybeState = diagram.GetState(action.Id);
+                    if (maybeState.HasValue)
+                    {
+                        if (action.Type == "ENTRY_ACTION")
+                            maybeState.ValueOrDefault().OnEntry = action;
+                                
+                        if(action.Type == "EXIT_ACTION")        
+                            maybeState.ValueOrDefault().OnExit = action;
+                    }
+                }
                 
                 if(createdObject is Transition transition)
                     diagram.Transitions.Add(transition);

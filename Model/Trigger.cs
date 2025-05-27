@@ -13,4 +13,9 @@ public class Trigger : Identifiable
     {
         return $"Trigger [Id={Id}, Description={Description}]";
     }
+    
+    public void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }

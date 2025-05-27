@@ -1,0 +1,21 @@
+﻿using Model;
+using View.Diagram.Action;
+using View.Utils;
+
+namespace View.Diagram.State;
+
+public class SimpleStateRenderer : IRenderer<SimpleState>
+{
+    public string Render(SimpleState state)
+    {
+        string description = null;
+
+        if (state.OnEntry != null)
+            description = new ActionRenderer().Render(state.OnEntry);
+
+        if (state.OnExit != null)
+            description += "\r\n" + new ActionRenderer().Render(state.OnExit); 
+        
+        return String.Join("\r\n", new Rectangle().DrawConsoleRectangle(state.Name, description));
+    }
+}
