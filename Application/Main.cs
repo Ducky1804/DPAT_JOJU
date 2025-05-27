@@ -12,7 +12,7 @@ class Application
         string? fileName = "";
 
         if (string.IsNullOrWhiteSpace(fileName))
-            fileName = "invalid_deterministic1";
+            fileName = "invalid_deterministic3";
             
         string filePath = Path.Combine(baseDir, "Resources", fileName + ".fsm");
 
