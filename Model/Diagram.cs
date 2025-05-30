@@ -5,13 +5,13 @@ namespace Model;
 public class Diagram
 {
     public string Name { get; set; }
-    public List<State> States { get; set; } = new();
+    public List<State.State> States { get; set; } = new();
     public List<Trigger> Triggers { get; set; } = new();
     public List<Transition> Transitions { get; set; } = new();
 
-    public Maybe<State> GetState(string? identifier)
+    public Maybe<State.State> GetState(string? identifier)
     {
-        if (identifier == null) return Maybe<State>.None();
+        if (identifier == null) return Maybe<State.State>.None();
 
         foreach (var state in States)
         {
@@ -19,12 +19,12 @@ public class Diagram
             if (result.HasValue) return result;
         }
 
-        return Maybe<State>.None();
+        return Maybe<State.State>.None();
     }
 
-    private Maybe<State> FindStateRecursive(State state, string identifier)
+    private Maybe<State.State> FindStateRecursive(State.State state, string identifier)
     {
-        if (state.Id == identifier) return Maybe<State>.Of(state);
+        if (state.Id == identifier) return Maybe<State.State>.Of(state);
 
         foreach (var child in state.Children)
         {
@@ -32,7 +32,7 @@ public class Diagram
             if (result.HasValue) return result;
         }
 
-        return Maybe<State>.None();
+        return Maybe<State.State>.None();
     }
 
     public Maybe<Trigger> GetTrigger(string? identifier)

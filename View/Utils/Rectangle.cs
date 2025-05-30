@@ -21,8 +21,13 @@ public class Rectangle
         return result;
     }
     
-    public List<string> DrawConsoleRectangle(string header, string description)
+    public List<string> DrawConsoleRectangle(string header, string? description)
     {
+        if (description == null)
+        {
+            return DrawConsoleRectangle(header);
+        }
+        
         var descriptionLines = description.Split('\n').Select(line => line.Replace("\r", "")).ToList();
         var lines = new List<string> { header.Replace("\r", "") };
         lines.AddRange(descriptionLines);
@@ -50,5 +55,13 @@ public class Rectangle
         return result;
     }
 
+}
+
+public static class RectangleExtensions
+{
+    public static string ConvertToString(this List<string> lines)
+    {
+        return string.Join("\r\n", lines);
+    }
 }
 

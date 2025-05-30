@@ -9,23 +9,13 @@ public class StateDiagramRenderer : IRenderer<Diagram>
 {
     public string Render(Diagram t)
     {
-        // Header
-        new BoxedContentPrinter(ConsoleColor.Yellow).Print(t.Name);
+        string content = new HeaderRenderer().Render(t.Name);
+        new BoxedContentPrinter(ConsoleColor.Yellow).Print(content);
         
-        IVisitor visitor = new RenderVisitor(t);
+        IVisitor visitor = new RenderVisitor();
         foreach (var state in t.States)
         {
             state.Accept(visitor);
-        }
-
-        foreach (var trigger in t.Triggers)
-        {
-            trigger.Accept(visitor);
-        }
-
-        foreach (var transition in t.Transitions)
-        {
-            transition.Accept(visitor);
         }
 
         return "";

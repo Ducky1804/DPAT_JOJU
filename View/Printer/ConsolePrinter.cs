@@ -7,7 +7,10 @@ public class ConsolePrinter(ConsoleColor color = ConsoleColor.White) : IPrinter
     {
         var previousColor = Console.ForegroundColor;
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-        Console.SetCursorPosition((Console.WindowWidth - content.Length) / 2, Console.CursorTop);
+        int x = (Console.WindowWidth - content.Length) / 2;
+        if (x < 0) x = 0;
+
+        Console.SetCursorPosition(x, Console.CursorTop);
         Console.ForegroundColor = color;
         Console.WriteLine(content);
         Console.ForegroundColor = previousColor;

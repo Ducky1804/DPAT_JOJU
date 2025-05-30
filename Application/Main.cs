@@ -1,4 +1,6 @@
-﻿using DPAT_JOJU.Commands;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using DPAT_JOJU.Commands;
 using Model;
 using View;
 using View.Printer;
@@ -9,6 +11,11 @@ class Application
 {
 
     public static void Main(string[] args)
+    {
+        Init();
+    }
+
+    private static void Init()
     {
         IPrinter printer = new ConsolePrinter();
         IPrinter errorPrinter = new ErrorConsolePrinter();
@@ -34,16 +41,17 @@ class Application
         {
             Console.Clear();
             errorPrinter.Print(new NoFileError(file).Render());
+            Init();
             return;
         }
         
         ICommand<Diagram> loadCommand = new LoadCommand(file, fileContent);
         Diagram diagram = loadCommand.Execute();
         
-        //ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
-        //Boolean valid = validateCommand.Execute();
+        ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
+        Boolean valid = validateCommand.Execute();
 
-        if (false)
+        if (!valid)
         {
             Console.Clear();
             errorPrinter.Print(new ValidationError().Render());

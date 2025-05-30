@@ -1,4 +1,4 @@
-namespace Model;
+namespace Model.State;
 
 public abstract class State : Nameable
 {

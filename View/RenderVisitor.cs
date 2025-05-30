@@ -1,62 +1,42 @@
 ﻿using Model;
+using View;
 using View.Diagram.Action;
 using View.Diagram.State;
+using View.Factory;
 using View.Printer;
 using View.Utils;
 using Action = System.Action;
 
-public class RenderVisitor(Model.Diagram diagram) : IVisitor
+public class RenderVisitor : IVisitor
 {
-    private readonly Rectangle rectangle = new();
+    private readonly RenderFactory _renderFactory = new();
 
     public void Visit(SimpleState state)
     {
-        var lines = RenderStateWithRectangle(state);
-        new ConsolePrinter().Print(lines);
+        IRenderer<SimpleState> renderer = _renderFactory.CreateStateRenderer(state);
+        String renderedComponent = renderer.Render(state);
+        new ConsolePrinter().Print(renderedComponent);
     }
 
     public void Visit(InitialState state)
     {
-        var lines = RenderStateWithRectangle(state);
-        new ConsolePrinter().Print(lines);
+        IRenderer<InitialState> renderer = _renderFactory.CreateStateRenderer(state);
+        String renderedComponent = renderer.Render(state);
+        new ConsolePrinter().Print(renderedComponent);
     }
 
     public void Visit(FinalState state)
     {
-        var lines = RenderStateWithRectangle(state);
-        new ConsolePrinter().Print(lines);
+        IRenderer<FinalState> renderer = _renderFactory.CreateStateRenderer(state);
+        string renderedComponent = renderer.Render(state);
+        new ConsolePrinter().Print(renderedComponent);
     }
 
     public void Visit(CompoundState state)
     {
-        var lines = RenderStateWithRectangle(state);
-        new ConsolePrinter().Print(lines);
-    }
-
-    // Nieuwe helpermethode die elke state recursief rendert in een rechthoek en de strings teruggeeft
-    private string RenderStateWithRectangle(Model.State state)
-    {
-        string header = state.GetType().Name + ": " + state.Name;
-        string description = "";
-
-        switch (state)
-        {
-            case SimpleState simple:
-                description = new SimpleStateRenderer().Render(simple);
-                break;
-
-            case CompoundState compound:
-                description = new CompoundStateRenderer().Render(compound);
-                // Recursief children toevoegen als rectangles, onder elkaar
-                foreach (var child in compound.Children)
-                {
-                    var childLines = RenderStateWithRectangle(child);
-                    description += "\n" + string.Join("\n", childLines);
-                }
-                break;
-        }
-        
-        return String.Join("\r\n", rectangle.DrawConsoleRectangle(header, description.Trim()));
+        IRenderer<CompoundState> renderer = _renderFactory.CreateStateRenderer(state);
+        string renderedComponent = renderer.Render(state);
+        new ConsolePrinter().Print(renderedComponent);
     }
 
     public void Visit(Trigger trigger)

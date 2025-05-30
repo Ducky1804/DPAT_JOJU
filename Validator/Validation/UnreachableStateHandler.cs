@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.State;
 
 namespace Validator.Validation;
 

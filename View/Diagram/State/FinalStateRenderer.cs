@@ -6,6 +6,6 @@ public class FinalStateRenderer : IRenderer<FinalState>
 {
     public string Render(FinalState finalState)
     {
-        return "\ud83d\udd34 Initial: " + finalState.Name;
+        return "\ud83d\udd34 Final: " + finalState.Name;
     }
 }

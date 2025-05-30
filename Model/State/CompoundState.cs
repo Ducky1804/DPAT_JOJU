@@ -1,6 +1,6 @@
 namespace Model;
 
-public class CompoundState : State
+public class CompoundState : State.State
 {
     public CompoundState(string id, string name) : base(id, name)
     {
