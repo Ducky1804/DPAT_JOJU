@@ -11,19 +11,16 @@ public class NonDeterministicTransitionHandler : BaseValidationHandler
 
         foreach (var group in transitionsPerSource)
         {
-            // Groepeer op trigger binnen dezelfde bronstate
             var duplicateTriggers = group
-                .GroupBy(t => t.Trigger)
+                .GroupBy(t => new { t.Trigger, t.Guard })
                 .Where(g => g.Count() > 1);
 
-            if (duplicateTriggers.Any())
+            foreach (var dup in duplicateTriggers)
             {
-                return false; // Niet-deterministisch
+                return false;
             }
         }
 
         return true;
     }
-
-
 }
