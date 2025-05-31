@@ -31,7 +31,7 @@ class Application
         {
             if (string.IsNullOrWhiteSpace(file))
             {
-                file = "example_user_account";
+                file = "example_lamp";
             }
 
             ICommand<String> fileReaderCommand = new FileReadCommand(file);
@@ -48,7 +48,7 @@ class Application
         ICommand<Diagram> loadCommand = new LoadCommand(file, fileContent);
         Diagram diagram = loadCommand.Execute();
         
-        ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
+        /*ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
         Boolean valid = validateCommand.Execute();
 
         if (!valid)
@@ -56,7 +56,7 @@ class Application
             Console.Clear();
             errorPrinter.Print(new ValidationError().Render());
             return;
-        }
+        }*/
         
         ICommand<Boolean> viewCommand = new ViewCommand(diagram);
         viewCommand.Execute();
