@@ -38,7 +38,7 @@ public class StateFactory : IFactory<State>
         }
         else
         {
-            diagram.States.Add(newState); // toegevoegde methode
+            diagram.States.Add(newState);
         }
 
         return newState;

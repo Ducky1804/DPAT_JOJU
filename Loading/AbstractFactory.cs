@@ -29,7 +29,9 @@ public class AbstractFactory
             Name = name,
         };
 
-        foreach (string line in content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+        StringReader reader = new StringReader(content);
+        string? line;
+        while((line = reader.ReadLine()) != null)
         {
             if (line.StartsWith("#"))
                 continue;

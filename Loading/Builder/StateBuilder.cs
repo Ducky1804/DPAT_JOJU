@@ -49,7 +49,7 @@ public class StateBuilder : IBuilder<State>
         {
             state.ParentState = _parent;
         }
-
+        
         return state;
     }
 }
