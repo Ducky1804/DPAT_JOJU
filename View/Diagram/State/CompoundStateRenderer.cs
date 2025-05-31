@@ -24,8 +24,9 @@ public class CompoundStateRenderer : IRenderer<CompoundState>
             }
             else
             {
-                var renderer = new SimpleStateRenderer();
-                String content = renderer.Render((SimpleState)child);
+                var renderer = RenderFactory.Instance.CreateStateRenderer(child);
+                
+                String content = renderer.Render(child);
                 result += content;
             }
 

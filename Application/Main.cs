@@ -53,7 +53,7 @@ class Application
 
         if (!valid)
         {
-            // Console.Clear();
+            Console.Clear();
             errorPrinter.Print(new ValidationError().Render());
             return;
         }

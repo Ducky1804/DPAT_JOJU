@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using System.Runtime;
+using Model;
 using Model.State;
 using View.Diagram.State;
 
@@ -6,20 +7,52 @@ namespace View.Factory;
 
 public class RenderFactory
 {
-    private Dictionary<Type, IRenderer> _renderers = new();
-    
-    public RenderFactory()
+    private static RenderFactory? _instance = null;
+
+    public static RenderFactory Instance
     {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new RenderFactory();
+            }
+
+            return _instance;
+        }
+    }
+
+    private Dictionary<Type, IRenderer> _renderers = new();
+
+    private RenderFactory()
+    {
+        _renderers.Add(typeof(SimpleState), new SimpleStateRenderer());
         _renderers.Add(typeof(FinalState), new FinalStateRenderer());
         _renderers.Add(typeof(InitialState), new InitialStateRenderer());
         _renderers.Add(typeof(CompoundState), new CompoundStateRenderer());
-        _renderers.Add(typeof(SimpleState), new SimpleStateRenderer());
     }
-    
-    public IRenderer<T> CreateStateRenderer<T>(T state) where T : State
+
+    public IRenderer<T> CreateStateRenderer<T>(T state)
     {
-        var renderer = _renderers[state.GetType()] as IRenderer<T>;
-        if (renderer == null) throw new Exception("Renderer not found or incorrect type!");
-        return renderer;
+        Type type = state.GetType();
+
+        if (type == typeof(State))
+            type = GetConcreteType(state);
+        
+        if (_renderers.TryGetValue(type, out var renderer))
+        {
+            if (renderer is IRenderer<T> typedRenderer)
+            {
+                return typedRenderer;
+            }
+
+            throw new InvalidCastException($"Registered renderer does not match type IRenderer<{typeof(T).Name}>");
+        }
+
+        throw new KeyNotFoundException($"No renderer registered for type {state.GetType().Name}");
+    }
+
+    private Type GetConcreteType(State state)
+    {
     }
 }

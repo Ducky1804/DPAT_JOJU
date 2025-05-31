@@ -9,7 +9,7 @@ using Action = System.Action;
 
 public class RenderVisitor : IVisitor
 {
-    private readonly RenderFactory _renderFactory = new();
+    private readonly RenderFactory _renderFactory = RenderFactory.Instance;
 
     public void Visit(SimpleState state)
     {

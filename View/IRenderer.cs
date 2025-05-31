@@ -1,8 +1,9 @@
-﻿namespace View;
+﻿using Model.State;
+
+namespace View;
 
 public interface IRenderer
 {
-    
 }
 public interface IRenderer<T> : IRenderer
 { 
