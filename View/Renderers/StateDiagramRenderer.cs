@@ -16,6 +16,10 @@ public class StateDiagramRenderer : IRenderer<Diagram>
         foreach (var state in t.States)
         {
             state.Accept(visitor);
+            foreach (var transition in state.Transitions)
+            {
+                transition.Accept(visitor);
+            }
         }
 
         return "";

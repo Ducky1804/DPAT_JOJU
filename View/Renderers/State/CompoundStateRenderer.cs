@@ -1,6 +1,7 @@
 ﻿using System.Security.AccessControl;
 using Model;
 using View.Factory;
+using View.Printer;
 using View.Utils;
 
 namespace View.Diagram.State;
@@ -24,9 +25,9 @@ public class CompoundStateRenderer : IRenderer<CompoundState>
             }
             else
             {
-                var renderer = RenderFactory.Instance.CreateStateRenderer(child);
+                var renderer = new SimpleStateRenderer();
                 
-                String content = renderer.Render(child);
+                String content = renderer.Render((SimpleState) child);
                 result += content;
             }
 
@@ -34,7 +35,7 @@ public class CompoundStateRenderer : IRenderer<CompoundState>
         }
 
         Rectangle rectangle = new Rectangle();
-        return String.Join("\r\n",
-            rectangle.DrawConsoleRectangle("\ud83d\udca8 Compound: " + compound.Name, result));
+        new ConsolePrinter().PrintLines(rectangle.DrawConsoleRectangle("\ud83d\udca8 Compound: " + compound.Name, result));
+        return "";
     }
 }

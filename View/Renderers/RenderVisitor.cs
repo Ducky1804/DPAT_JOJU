@@ -1,11 +1,10 @@
 ﻿using Model;
-using View;
+using View.Diagram;
 using View.Diagram.Action;
-using View.Diagram.State;
 using View.Factory;
 using View.Printer;
-using View.Utils;
-using Action = System.Action;
+
+namespace View;
 
 public class RenderVisitor : IVisitor
 {
@@ -41,17 +40,18 @@ public class RenderVisitor : IVisitor
 
     public void Visit(Trigger trigger)
     {
-        // Geen rendering?
     }
 
     public void Visit(Model.Action action)
     {
+        Console.WriteLine("Rendering action");
         string content = new ActionRenderer().Render(action);
         new ConsolePrinter().Print(content);
     }
 
     public void Visit(Transition transition)
     {
-        // Geen rendering?
+        string content = new TransitionRenderer().Render(transition);
+        new ConsolePrinter().Print(content);
     }
 }

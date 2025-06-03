@@ -4,7 +4,7 @@ public class Transition : Identifiable
 {
     public string Source { get; set; }
     public string Destination { get; set; }
-    public Trigger Trigger { get; set; }
+    public Trigger? Trigger { get; set; }
     public String Guard { get; set; }
     
     public Transition(string id, string source, string destination, Trigger trigger, string guard) : base(id)

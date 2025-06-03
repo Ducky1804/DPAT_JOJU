@@ -14,8 +14,15 @@ public class SimpleStateRenderer : IRenderer<SimpleState>
             description = new ActionRenderer().Render(state.OnEntry);
 
         if (state.OnExit != null)
-            description += "\r\n" + new ActionRenderer().Render(state.OnExit); 
+            description += "\r\n" + new ActionRenderer().Render(state.OnExit);
+
+        List<string> content = new Rectangle().DrawConsoleRectangle("\ud83d\udccd " + state.Name, description);
         
-        return String.Join("\r\n", new Rectangle().DrawConsoleRectangle("\ud83d\udccd " + state.Name, description));
+        foreach (var trans in state.Transitions)
+        {
+            content.Add(new TransitionRenderer().Render(trans));
+        }
+        
+        return String.Join("\r\n", content);
     }
 }
