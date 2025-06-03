@@ -44,7 +44,6 @@ public class RenderVisitor : IVisitor
 
     public void Visit(Model.Action action)
     {
-        Console.WriteLine("Rendering action");
         string content = new ActionRenderer().Render(action);
         new ConsolePrinter().Print(content);
     }

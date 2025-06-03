@@ -68,9 +68,14 @@ public class AbstractFactory
                             maybeState.ValueOrDefault().OnExit = action;
                     }
                 }
-                
-                if(createdObject is Transition transition)
-                    diagram.Transitions.Add(transition);
+
+                if (createdObject is Transition transition)
+                {
+                    Maybe<State> maybeState = diagram.GetState(transition.Source);
+                    
+                    if (maybeState.HasValue)
+                        maybeState.ValueOrDefault().Transitions.Add(transition);
+                }
             }
         }
 
