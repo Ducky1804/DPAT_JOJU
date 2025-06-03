@@ -34,25 +34,27 @@ public class RenderFactory
 
     public IRenderer<T> CreateStateRenderer<T>(T state)
     {
-        Type type = state.GetType();
+        if (state == null) return null;
 
-        if (type == typeof(State))
-            type = GetConcreteType(state);
-        
-        if (_renderers.TryGetValue(type, out var renderer))
+        Type stateType = state.GetType();
+
+        if (_renderers.TryGetValue(stateType, out var renderer))
         {
             if (renderer is IRenderer<T> typedRenderer)
             {
                 return typedRenderer;
             }
 
-            throw new InvalidCastException($"Registered renderer does not match type IRenderer<{typeof(T).Name}>");
+            return (IRenderer<T>)renderer;
         }
 
-        throw new KeyNotFoundException($"No renderer registered for type {state.GetType().Name}");
+        return null;
     }
 
-    private Type GetConcreteType(State state)
+    public IRenderer CreateStateRendererByType(Type type)
     {
+        _renderers.TryGetValue(type, out var renderer);
+        return (IRenderer)renderer;
     }
+
 }

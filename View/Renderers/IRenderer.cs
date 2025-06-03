@@ -5,7 +5,7 @@ namespace View;
 public interface IRenderer
 {
 }
-public interface IRenderer<T> : IRenderer
+public interface IRenderer<in T> : IRenderer
 { 
     String Render(T t);
 }

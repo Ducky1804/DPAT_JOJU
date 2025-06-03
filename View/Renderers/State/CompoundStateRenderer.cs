@@ -31,7 +31,6 @@ public class CompoundStateRenderer : IRenderer<CompoundState>
             }
 
             result += "\r\n";
-            result += "\r\n";
         }
 
         Rectangle rectangle = new Rectangle();

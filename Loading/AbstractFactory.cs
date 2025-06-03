@@ -1,6 +1,7 @@
 using Loading.Factory;
 using Model;
 using System.Reflection;
+using Loading.Reader;
 using Model.State;
 using Model.Utils;
 using Action = Model.Action;
@@ -9,11 +10,13 @@ namespace Loading;
 
 public class AbstractFactory
 {
-    private readonly Dictionary<string, Type> factories;
+    private readonly Dictionary<string, Type> _factories;
+    private readonly IFileReader _reader;
 
-    public AbstractFactory()
+    public AbstractFactory(IFileReader fileReader)
     {
-        factories = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
+        _reader = fileReader;
+        _factories = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
         {
             { "STATE", typeof(StateFactory) },
             { "TRIGGER", typeof(TriggerFactory) },
@@ -29,18 +32,16 @@ public class AbstractFactory
             Name = name,
         };
 
-        foreach (string line in content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+        List<string> filteredLines = _reader.ReadFile(content);
+        foreach (string line in filteredLines)
         {
-            if (line.StartsWith("#"))
-                continue;
-
             var tokens = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (tokens.Length == 0)
                 continue;
 
             string keyword = tokens[0].ToUpper();
 
-            if (factories.TryGetValue(keyword, out Type factoryType))
+            if (_factories.TryGetValue(keyword, out Type factoryType))
             {
                 var factoryInstance = Activator.CreateInstance(factoryType);
                 var createMethod = factoryType.GetMethod("Create", new[] { typeof(Diagram), typeof(string) });

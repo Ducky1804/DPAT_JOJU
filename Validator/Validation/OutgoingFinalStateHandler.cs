@@ -1,6 +1,7 @@
 ﻿using Model;
 using Model.State;
 using Model.Utils;
+using Validator.Exceptions;
 
 namespace Validator.Validation;
 
@@ -15,8 +16,8 @@ public class OutgoingFinalStateHandler : BaseValidationHandler
             if (!maybeSource.HasValue) continue;
 
             State maybe = maybeSource.ValueOrDefault();
-            
-            if (maybe is FinalState) return false;
+
+            if (maybe is FinalState) throw new ValidationException("final state cannot have outgoing transitions!");
         }
 
         return true;
