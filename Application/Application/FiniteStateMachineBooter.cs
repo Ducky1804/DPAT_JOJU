@@ -1,4 +1,6 @@
-﻿namespace DPAT_JOJU;
+﻿using View.Factory;
+
+namespace DPAT_JOJU;
 
 using Commands;
 using Model;
@@ -7,10 +9,15 @@ using View.Printer;
 
 public class FiniteStateMachineBooter : IApplicationBooter
 {
-    private const string DefaultFile = "example_lamp";
+    private const string DefaultFile = "example_user_account";
+
+    private RenderMethodFactory _renderMethodFactory = new();
+    private string _renderMethod = "";
     
     public void Boot()
     {
+        _renderMethod = _renderMethodFactory.GetRenderMethods()[0];
+        
         IPrinter printer = new ConsolePrinter();
         IPrinter errorPrinter = new ErrorConsolePrinter();
         
@@ -61,6 +68,8 @@ public class FiniteStateMachineBooter : IApplicationBooter
         }
         
         Render(diagram);
+        
+        ListenForCommands(diagram);
     }
 
     private Diagram LoadDiagram(string file, string fileContent)
@@ -71,7 +80,41 @@ public class FiniteStateMachineBooter : IApplicationBooter
 
     private void Render(Diagram diagram)
     {
-        ICommand<Boolean> viewCommand = new ViewCommand(diagram);
+        IVisitor visitor = new RenderMethodFactory().Create(_renderMethod);
+        ICommand<Boolean> viewCommand = new ViewCommand(diagram, visitor);
         viewCommand.Execute();
     }
+
+    private void ListenForCommands(Diagram diagram)
+    {
+        char input = Console.ReadKey().KeyChar;
+        Console.Clear();
+
+        if (input == 'm')
+        {
+            _renderMethod = SwitchRenderMethod();
+            Render(diagram);
+        }
+
+        if (input == 'q')
+        {
+            new BoxedContentPrinter(ConsoleColor.Green).Print("Bye bye!");
+            return;
+        }
+
+        ListenForCommands(diagram);
+    }
+    
+    private string SwitchRenderMethod()
+    {
+        List<string> methods = _renderMethodFactory.GetRenderMethods();
+        string currentMethod = _renderMethod;
+
+        int currentIndex = methods.IndexOf(currentMethod);
+
+        int nextIndex = (currentIndex == -1 || currentIndex == methods.Count - 1) ? 0 : currentIndex + 1;
+
+        return methods[nextIndex];
+    }
+
 }

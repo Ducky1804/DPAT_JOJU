@@ -5,17 +5,18 @@ namespace View.Diagram;
 
 using Model;
 
-public class StateDiagramRenderer : IRenderer<Diagram>
+public class StateDiagramRenderer
 {
-    public string Render(Diagram t)
+    public string Render(Diagram t, IVisitor renderMethod)
     {
         string content = new HeaderRenderer().Render(t.Name);
         new BoxedContentPrinter(ConsoleColor.Yellow).Print(content);
-        
-        IVisitor visitor = new RenderVisitor();
+
+        IVisitor visitor = renderMethod;
         foreach (var state in t.States)
         {
             state.Accept(visitor);
+            
             foreach (var transition in state.Transitions)
             {
                 transition.Accept(visitor);
