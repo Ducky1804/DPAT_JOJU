@@ -4,7 +4,7 @@ namespace View.Factory;
 
 public class RenderMethodFactory
 {
-    private readonly Dictionary<string, IVisitor> _renderMethods = new();
+    private readonly Dictionary<string, RenderVisitor> _renderMethods = new();
     
     public RenderMethodFactory()
     {
@@ -12,7 +12,7 @@ public class RenderMethodFactory
         _renderMethods.Add("text", new TextualRenderVisitor());
     }
 
-    public IVisitor Create(string type)
+    public RenderVisitor Create(string type)
     {
         return _renderMethods[type];
     }

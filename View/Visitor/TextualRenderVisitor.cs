@@ -4,37 +4,40 @@ using Action = Model.Action;
 
 namespace View;
 
-public class TextualRenderVisitor : IVisitor
+public class TextualRenderVisitor : RenderVisitor
 {
-    public void Visit(SimpleState state)
+    protected override string Render(SimpleState state)
     {
-        new ConsolePrinter().Print(state.Name);
+        throw new NotImplementedException();
     }
 
-    public void Visit(InitialState state)
+    protected override string Render(InitialState state)
     {
-        new ConsolePrinter().Print(state.Name);
+        throw new NotImplementedException();
     }
 
-    public void Visit(FinalState state)
+    protected override string Render(FinalState state)
     {
-        new ConsolePrinter().Print(state.Name);
+        throw new NotImplementedException();
     }
 
-    public void Visit(CompoundState state)
+    protected override string Render(CompoundState state)
     {
-        new ConsolePrinter().Print(state.Name);
+        throw new NotImplementedException();
     }
 
-    public void Visit(Trigger trigger)
+    protected override string Render(Trigger trigger)
     {
+        throw new NotImplementedException();
     }
 
-    public void Visit(Action action)
+    protected override string Render(Action action)
     {
+        throw new NotImplementedException();
     }
 
-    public void Visit(Transition transition)
+    protected override string Render(Transition transition)
     {
+        throw new NotImplementedException();
     }
 }

@@ -80,7 +80,7 @@ public class FiniteStateMachineBooter : IApplicationBooter
 
     private void Render(Diagram diagram)
     {
-        IVisitor visitor = new RenderMethodFactory().Create(_renderMethod);
+        RenderVisitor visitor = new RenderMethodFactory().Create(_renderMethod);
         ICommand<Boolean> viewCommand = new ViewCommand(diagram, visitor);
         viewCommand.Execute();
     }

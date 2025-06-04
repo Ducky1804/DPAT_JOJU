@@ -7,22 +7,29 @@ using Model;
 
 public class StateDiagramRenderer
 {
-    public string Render(Diagram t, IVisitor renderMethod)
+    public string Render(Diagram t, RenderVisitor renderMethod)
     {
-        string content = new HeaderRenderer().Render(t.Name);
-        new BoxedContentPrinter(ConsoleColor.Yellow).Print(content);
+        string header = new HeaderRenderer().Render(t.Name);
+        new BoxedContentPrinter(ConsoleColor.Yellow).Print(header);
 
-        IVisitor visitor = renderMethod;
+        
+        List<string> content = new();
         foreach (var state in t.States)
         {
-            state.Accept(visitor);
-            
+            state.Accept(renderMethod);
+
+            content.Add(renderMethod.Result); // <-- voeg gegenereerde string toe
+
             foreach (var transition in state.Transitions)
             {
-                transition.Accept(visitor);
+                transition.Accept(renderMethod);
+
+                content.Add(renderMethod.Result);
             }
         }
-
+        
+        new ConsolePrinter().PrintLines(content);
         return "";
     }
+
 }

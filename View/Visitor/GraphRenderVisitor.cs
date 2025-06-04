@@ -1,56 +1,102 @@
-﻿using Model;
+﻿// using Model;
+// using View.Diagram;
+// using View.Diagram.Action;
+// using View.Factory;
+// using View.Printer;
+//
+// namespace View;
+//
+// public class GraphRenderVisitor : RenderVisitor
+// {
+//     private readonly RenderFactory _renderFactory = RenderFactory.Instance;
+//
+//     public string Visit(SimpleState state)
+//     {
+//         IRenderer<SimpleState> renderer = _renderFactory.CreateStateRenderer<SimpleState>(state.GetType());
+//         String renderedComponent = renderer.Render(state);
+//         new ConsolePrinter().Print(renderedComponent);
+//     }
+//
+//     public string Visit(InitialState state)
+//     {
+//         IRenderer<InitialState> renderer = _renderFactory.CreateStateRenderer<InitialState>(state.GetType());
+//         String renderedComponent = renderer.Render(state);
+//         new ConsolePrinter().Print(renderedComponent);
+//     }
+//
+//     public string Visit(FinalState state)
+//     {
+//         IRenderer<FinalState> renderer = _renderFactory.CreateStateRenderer<FinalState>(state.GetType());
+//         string renderedComponent = renderer.Render(state);
+//         new ConsolePrinter().Print(renderedComponent);
+//     }
+//
+//     public string Visit(CompoundState state)
+//     {
+//         IRenderer<CompoundState> renderer = _renderFactory.CreateStateRenderer<CompoundState>(state.GetType());
+//         string renderedComponent = renderer.Render(state);
+//         new ConsolePrinter().Print(renderedComponent);
+//     }
+//
+//     public string Visit(Trigger trigger)
+//     {
+//     }
+//
+//     public string Visit(Model.Action action)
+//     {
+//         string content = new ActionRenderer().Render(action);
+//         new ConsolePrinter().Print(content);
+//     }
+//
+//     public string Visit(Transition transition)
+//     {
+//         string content = new TransitionRenderer().Render(transition);
+//         new ConsolePrinter().Print(content);
+//     }
+// }
+
+using Model;
+using View;
 using View.Diagram;
-using View.Diagram.Action;
 using View.Factory;
-using View.Printer;
+using Action = Model.Action;
 
-namespace View;
-
-public class GraphRenderVisitor : IVisitor
+public class GraphRenderVisitor : RenderVisitor
 {
     private readonly RenderFactory _renderFactory = RenderFactory.Instance;
 
-    public void Visit(SimpleState state)
+    protected override string Render(SimpleState state)
     {
-        IRenderer<SimpleState> renderer = _renderFactory.CreateStateRenderer<SimpleState>(state.GetType());
-        String renderedComponent = renderer.Render(state);
-        new ConsolePrinter().Print(renderedComponent);
+        return _renderFactory.CreateStateRenderer<SimpleState>(state.GetType()).Render(state);
     }
 
-    public void Visit(InitialState state)
+    protected override string Render(InitialState state)
     {
-        IRenderer<InitialState> renderer = _renderFactory.CreateStateRenderer<InitialState>(state.GetType());
-        String renderedComponent = renderer.Render(state);
-        new ConsolePrinter().Print(renderedComponent);
+        return _renderFactory.CreateStateRenderer<InitialState>(state.GetType()).Render(state);
     }
 
-    public void Visit(FinalState state)
+    protected override string Render(FinalState state)
     {
-        IRenderer<FinalState> renderer = _renderFactory.CreateStateRenderer<FinalState>(state.GetType());
-        string renderedComponent = renderer.Render(state);
-        new ConsolePrinter().Print(renderedComponent);
+        return _renderFactory.CreateStateRenderer<FinalState>(state.GetType()).Render(state);
     }
 
-    public void Visit(CompoundState state)
+    protected override string Render(CompoundState state)
     {
-        IRenderer<CompoundState> renderer = _renderFactory.CreateStateRenderer<CompoundState>(state.GetType());
-        string renderedComponent = renderer.Render(state);
-        new ConsolePrinter().Print(renderedComponent);
+        return _renderFactory.CreateStateRenderer<CompoundState>(state.GetType()).Render(state);
     }
 
-    public void Visit(Trigger trigger)
+    protected override string Render(Trigger trigger)
     {
+        return trigger.ToString();
     }
 
-    public void Visit(Model.Action action)
+    protected override string Render(Action action)
     {
-        string content = new ActionRenderer().Render(action);
-        new ConsolePrinter().Print(content);
+        throw new NotImplementedException();
     }
 
-    public void Visit(Transition transition)
+    protected override string Render(Transition transition)
     {
-        string content = new TransitionRenderer().Render(transition);
-        new ConsolePrinter().Print(content);
+        return new TransitionRenderer().Render(transition);
     }
 }
