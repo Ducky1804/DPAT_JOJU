@@ -81,4 +81,9 @@ public class AbstractFactory
 
         return diagram;
     }
+
+    public IFactory<T> CreateFactory<T>(string key)
+    {
+        return null;
+    }
 }
