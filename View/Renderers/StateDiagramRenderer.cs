@@ -18,7 +18,7 @@ public class StateDiagramRenderer
         {
             state.Accept(renderMethod);
 
-            content.Add(renderMethod.Result); // <-- voeg gegenereerde string toe
+            content.Add(renderMethod.Result);
 
             foreach (var transition in state.Transitions)
             {
