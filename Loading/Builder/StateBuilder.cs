@@ -7,36 +7,28 @@ public class StateBuilder : IBuilder<State>
 {
     private string _id;
     private string _name;
-    private State _parent;
     private string _type;
 
-    public string Id
+    public StateBuilder SetId(string id)
     {
-        get => _id;
-        set => _id = value;
+        _id = id;
+        return this;
     }
-
-    public string Name
+    
+    public StateBuilder SetName(string name)
     {
-        get => _name;
-        set => _name = value;
+        _name = name;
+        return this;
     }
-
-    public State Parent
+    
+    public StateBuilder SetType(string type)
     {
-        get => _parent;
-        set => _parent = value;
-    }
-
-    public string Type
-    {
-        get => _type;
-        set => _type = value;
+        _type = type;
+        return this;
     }
 
     public State Build()
     {
-        
         State state = _type switch
         {
             "COMPOUND" => new CompoundState(_id, _name),
@@ -44,11 +36,6 @@ public class StateBuilder : IBuilder<State>
             "FINAL" => new FinalState(_id, _name),
             _ => new SimpleState(_id, _name)
         };
-
-        if (_parent != null)
-        {
-            state.ParentState = _parent;
-        }
         
         return state;
     }

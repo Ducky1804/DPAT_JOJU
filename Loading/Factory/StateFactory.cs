@@ -25,9 +25,9 @@ public class StateFactory : IFactory<State>
         );
 
         StateBuilder builder = new();
-        builder.Id = id;
-        builder.Name = name;
-        builder.Type = type;
+        builder.SetId(id)
+            .SetName(name)
+            .SetType(type);
 
         State newState = builder.Build();
 
