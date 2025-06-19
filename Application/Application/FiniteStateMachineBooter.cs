@@ -1,77 +1,107 @@
-﻿namespace DPAT_JOJU;
-
-using Commands;
+﻿using DPAT_JOJU.Commands;
 using Model;
 using View;
+using View.Factory;
 using View.Printer;
+
+namespace DPAT_JOJU;
 
 public class FiniteStateMachineBooter : IApplicationBooter
 {
-    private const string DefaultFile = "example_lamp";
-    
+    private readonly IPrinter _printer = new ConsolePrinter();
+    private readonly IPrinter _errorPrinter = new ErrorConsolePrinter();
+    private readonly IInputReader _inputReader = new ConsoleInputReader();
+    private readonly RenderMethodFactory _renderMethodFactory = new();
+
+    private string _renderMethod = "";
+
     public void Boot()
     {
-        IPrinter printer = new ConsolePrinter();
-        IPrinter errorPrinter = new ErrorConsolePrinter();
-        
-        InitialRenderer menuRenderer = new InitialRenderer();
-        printer.Print(menuRenderer.Render());
-        
-        IInputReader inputReader = new ConsoleInputReader();
-        string file = inputReader.ReadInput();
+        _renderMethod = _renderMethodFactory.GetRenderMethods().FirstOrDefault() ?? "";
 
-        string fileContent;
-        try
+        while (true)
         {
-            if (string.IsNullOrWhiteSpace(file))
-                file = DefaultFile;
+            string file = AskUserForFile();
+            string? fileContent = TryReadFile(file);
+            if (fileContent == null) continue;
 
-            ICommand<String> fileReaderCommand = new FileReadCommand(file);
-            fileContent = fileReaderCommand.Execute();
-        }
-        catch (Exception e)
-        {
-            Console.Clear();
-            errorPrinter.Print(new NoFileError(file).Render());
-            Boot();
-            return;
-        }
+            Diagram diagram = LoadDiagram(file, fileContent);
+            if (!TryValidateDiagram(diagram)) continue;
 
-        Diagram diagram = LoadDiagram(file, fileContent);
-        
-        ICommand<Boolean> validateCommand = new ValidateCommand(diagram);
-        Boolean valid = true;
-        try
-        {
-            valid = validateCommand.Execute();
+            Render(diagram);
+            ListenForCommands(diagram);
+            break;
         }
-        catch (Exception e)
-        {
-            Console.Clear();
-            errorPrinter.Print(e.Message);
-            Boot();
-            return;
-        }
-
-        if (!valid)
-        {
-            Console.Clear();
-            errorPrinter.Print(new ValidationError().Render());
-            return;
-        }
-        
-        Render(diagram);
     }
 
-    private Diagram LoadDiagram(string file, string fileContent)
+    private string AskUserForFile()
     {
-        ICommand<Diagram> loadCommand = new LoadCommand(file, fileContent);
-        return loadCommand.Execute();
+        _printer.Print(new InitialRenderer().Render());
+        string input = _inputReader.ReadInput();
+        return string.IsNullOrWhiteSpace(input) ? "example_user_account" : input;
+    }
+
+    private string? TryReadFile(string file)
+    {
+        try
+        {
+            return new FileReadCommand(file).Execute();
+        }
+        catch
+        {
+            Console.Clear();
+            _errorPrinter.Print(new NoFileError(file).Render());
+            return null;
+        }
+    }
+
+    private Diagram LoadDiagram(string file, string content)
+        => new LoadCommand(file, content).Execute();
+
+    private bool TryValidateDiagram(Diagram diagram)
+    {
+        try
+        {
+            return new ValidateCommand(diagram).Execute();
+        }
+        catch (Exception e)
+        {
+            Console.Clear();
+            _errorPrinter.Print(e.Message);
+            return false;
+        }
     }
 
     private void Render(Diagram diagram)
     {
-        ICommand<Boolean> viewCommand = new ViewCommand(diagram);
-        viewCommand.Execute();
+        var visitor = _renderMethodFactory.Create(_renderMethod);
+        new ViewCommand(diagram, visitor).Execute();
+    }
+
+    private void ListenForCommands(Diagram diagram)
+    {
+        while (true)
+        {
+            var input = Console.ReadKey().KeyChar;
+            Console.Clear();
+
+            switch (input)
+            {
+                case 'm':
+                    _renderMethod = SwitchRenderMethod();
+                    Render(diagram);
+                    break;
+                case 'q':
+                    new BoxedContentPrinter(ConsoleColor.Green).Print("Bye bye!");
+                    return;
+            }
+        }
+    }
+
+    private string SwitchRenderMethod()
+    {
+        var methods = _renderMethodFactory.GetRenderMethods();
+        int index = methods.IndexOf(_renderMethod);
+        return methods[(index + 1) % methods.Count];
     }
 }

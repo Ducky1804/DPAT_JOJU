@@ -66,4 +66,9 @@ public class AbstractFactory
 
         return builder.Build();
     }
+
+    public IFactory<T> CreateFactory<T>(string key)
+    {
+        return null;
+    }
 }

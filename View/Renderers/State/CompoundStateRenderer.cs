@@ -15,27 +15,31 @@ public class CompoundStateRenderer : IRenderer<CompoundState>
 
     private string RenderChildren(CompoundState compound)
     {
-        string result = "";
+        var resultBuilder = new System.Text.StringBuilder();
 
-        foreach (var child in compound.Children)
+        for (int i = 0; i < compound.Children.Count; i++)
         {
+            var child = compound.Children[i];
+
             if (child is CompoundState compoundState)
             {
-                result += RenderChildren(compoundState);
+                resultBuilder.Append(RenderChildren(compoundState));
             }
             else
             {
                 var renderer = new SimpleStateRenderer();
-                
-                String content = renderer.Render((SimpleState) child);
-                result += content;
+                string content = renderer.Render((SimpleState)child);
+                resultBuilder.Append(content);
             }
 
-            result += "\r\n";
+            if (i < compound.Children.Count - 1)
+            {
+                resultBuilder.AppendLine();
+                resultBuilder.AppendLine();
+            }
         }
 
         Rectangle rectangle = new Rectangle();
-        new ConsolePrinter().PrintLines(rectangle.DrawConsoleRectangle("\ud83d\udca8 Compound: " + compound.Name, result));
-        return "";
+        return rectangle.DrawConsoleRectangle("💨 Compound: " + compound.Name, resultBuilder.ToString()).ConvertToString();
     }
 }

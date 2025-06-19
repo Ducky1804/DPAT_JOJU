@@ -32,13 +32,9 @@ public class RenderFactory
         _renderers.Add(typeof(CompoundState), new CompoundStateRenderer());
     }
 
-    public IRenderer<T> CreateStateRenderer<T>(T state)
+    public IRenderer<T> CreateStateRenderer<T>(Type type)
     {
-        if (state == null) return null;
-
-        Type stateType = state.GetType();
-
-        if (_renderers.TryGetValue(stateType, out var renderer))
+        if (_renderers.TryGetValue(type, out var renderer))
         {
             if (renderer is IRenderer<T> typedRenderer)
             {
@@ -49,12 +45,6 @@ public class RenderFactory
         }
 
         return null;
-    }
-
-    public IRenderer CreateStateRendererByType(Type type)
-    {
-        _renderers.TryGetValue(type, out var renderer);
-        return (IRenderer)renderer;
     }
 
 }

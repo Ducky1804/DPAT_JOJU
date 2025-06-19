@@ -5,23 +5,31 @@ namespace View.Diagram;
 
 using Model;
 
-public class StateDiagramRenderer : IRenderer<Diagram>
+public class StateDiagramRenderer
 {
-    public string Render(Diagram t)
+    public string Render(Diagram t, RenderVisitor renderMethod)
     {
-        string content = new HeaderRenderer().Render(t.Name);
-        new BoxedContentPrinter(ConsoleColor.Yellow).Print(content);
+        string header = new HeaderRenderer().Render(t.Name);
+        new BoxedContentPrinter(ConsoleColor.Yellow).Print(header);
+
         
-        IVisitor visitor = new RenderVisitor();
+        List<string> content = new();
         foreach (var state in t.States)
         {
-            state.Accept(visitor);
+            state.Accept(renderMethod);
+
+            content.Add(renderMethod.Result);
+
             foreach (var transition in state.Transitions)
             {
-                transition.Accept(visitor);
+                transition.Accept(renderMethod);
+
+                content.Add(renderMethod.Result);
             }
         }
-
+        
+        new ConsolePrinter().PrintLines(content);
         return "";
     }
+
 }

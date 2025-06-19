@@ -9,29 +9,28 @@ public class StateBuilder : IBuilder<State>
     private string _name;
     private string _type;
 
-    public string Id
+    public StateBuilder SetId(string id)
     {
-        get => _id;
-        set => _id = value;
+        _id = id;
+        return this;
     }
-
-    public string Name
+    
+    public StateBuilder SetName(string name)
     {
-        get => _name;
-        set => _name = value;
+        _name = name;
+        return this;
     }
-
-    public string Type
+    
+    public StateBuilder SetType(string type)
     {
-        get => _type;
-        set => _type = value;
+        _type = type;
+        return this;
     }
 
     public string Parent { get; set; }
 
     public State Build()
     {
-        
         State state = _type switch
         {
             "COMPOUND" => new CompoundState(_id, _name),

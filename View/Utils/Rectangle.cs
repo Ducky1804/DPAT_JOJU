@@ -37,14 +37,11 @@ public class Rectangle
         List<string> result = new();
         result.Add("┌" + new string('─', maxLength + 2) + "┐");
 
-        // Header line
         string headerLine = header.Replace("\r", "").PadRight(maxLength);
         result.Add($"│ {headerLine} │");
 
-        // Separator line
         result.Add("├" + new string('─', maxLength + 2) + "┤");
 
-        // Description lines
         foreach (string line in descriptionLines)
         {
             string paddedLine = line.PadRight(maxLength);
@@ -61,7 +58,8 @@ public static class RectangleExtensions
 {
     public static string ConvertToString(this List<string> lines)
     {
-        return string.Join("\r\n", lines);
+        string lineSerperator = Environment.NewLine;
+        return string.Join(lineSerperator, lines);
     }
 }
 
