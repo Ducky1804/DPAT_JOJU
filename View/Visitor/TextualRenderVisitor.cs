@@ -9,7 +9,7 @@ public class TextualRenderVisitor : RenderVisitor
 {
     protected override string Render(SimpleState state)
     {
-        return "Idk";
+        return "Simple state: " + state.Name;
     }
 
     protected override string Render(InitialState state)
@@ -38,9 +38,7 @@ public class TextualRenderVisitor : RenderVisitor
                 content.Add(Render(compoundState));
         }
         
-        content.Add("\n\r");
-        string joinedContent = string.Join("\n\r", content);
-        return Regex.Replace(joinedContent, @"\s+", "");
+        return string.Join("\r\n", content);
     }
 
     protected override string Render(Trigger trigger)
@@ -55,6 +53,6 @@ public class TextualRenderVisitor : RenderVisitor
 
     protected override string Render(Transition transition)
     {
-        return "Idk";
+        return "Transition: " + transition.Source + " -> " + transition.Destination;
     }
 }
