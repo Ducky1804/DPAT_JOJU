@@ -14,6 +14,9 @@ public class TransitionRenderer : IRenderer<Transition>
         if (t.Guard.Length > 0)
             builder.Append($"[{t.Guard}]");
 
+        if (t.Action != null)
+            builder.Append(" / " + t.Action.Description);
+
         builder.Append(" ──→ " + t.Destination);
         return builder.ToString();
     }

@@ -5,6 +5,7 @@ namespace Loading.Builder;
 public class TransitionBuilder : IBuilder<Transition>
 {
     private string _id;
+    private string _triggerName;
     private string _source;
     private string _destination;
     private Trigger _trigger;
@@ -34,6 +35,12 @@ public class TransitionBuilder : IBuilder<Transition>
         return this;
     }
 
+    public TransitionBuilder SetTriggerName(String name)
+    {
+        _triggerName = name;
+        return this;
+    }
+
     public TransitionBuilder SetGuard(string guard)
     {
         _guard = guard;
@@ -42,6 +49,6 @@ public class TransitionBuilder : IBuilder<Transition>
     
     public Transition Build()
     {
-        return new Transition(_id, _source, _destination, _trigger, _guard);
+        return new Transition(_id, _triggerName, _source, _destination, _trigger, _guard);
     }
 }

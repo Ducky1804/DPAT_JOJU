@@ -1,11 +1,13 @@
-﻿namespace Loading.Builder;
+﻿using Model.Enums;
+
+namespace Loading.Builder;
 
 using Model;
 
 public class ActionBuilder : IBuilder<Action>
 {
     private string _id;
-    private string _type;
+    private ActionType _type;
     private string _description;
 
     public ActionBuilder SetId(string id)
@@ -16,7 +18,7 @@ public class ActionBuilder : IBuilder<Action>
     
     public ActionBuilder SetType(string type)
     {
-        _type = type;
+        _type = ActionTypeExtensions.FromString(type);
         return this;
     }
 

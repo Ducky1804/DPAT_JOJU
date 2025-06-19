@@ -7,7 +7,6 @@ public class StateBuilder : IBuilder<State>
 {
     private string _id;
     private string _name;
-    private State _parent;
     private string _type;
 
     public string Id
@@ -22,17 +21,13 @@ public class StateBuilder : IBuilder<State>
         set => _name = value;
     }
 
-    public State Parent
-    {
-        get => _parent;
-        set => _parent = value;
-    }
-
     public string Type
     {
         get => _type;
         set => _type = value;
     }
+
+    public string Parent { get; set; }
 
     public State Build()
     {
@@ -45,11 +40,7 @@ public class StateBuilder : IBuilder<State>
             _ => new SimpleState(_id, _name)
         };
 
-        if (_parent != null)
-        {
-            state.ParentState = _parent;
-        }
-        
+        state.Parent = Parent;
         return state;
     }
 }

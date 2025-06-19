@@ -8,7 +8,7 @@ namespace Loading.Factory;
 
 public class StateFactory : IFactory<State>
 {
-    public State Create(Diagram diagram, string input)
+    public State Create(string input)
     {
         var match = Regex.Match(input, @"^STATE\s+(\w+)\s+(\w+)\s+""(.*?)""\s+:\s+(\w+);");
 
@@ -27,20 +27,9 @@ public class StateFactory : IFactory<State>
         StateBuilder builder = new();
         builder.Id = id;
         builder.Name = name;
+        builder.Parent = parent;
         builder.Type = type;
 
-        State newState = builder.Build();
-
-        if (parent != "_")
-        {
-            var parentState = diagram.GetState(parent).ValueOrDefault();
-            parentState?.AddChild(newState);
-        }
-        else
-        {
-            diagram.States.Add(newState);
-        }
-
-        return newState;
+        return builder.Build();
     }
 }

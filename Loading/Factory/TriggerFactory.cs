@@ -6,7 +6,7 @@ namespace Loading.Factory;
 
 public class TriggerFactory : IFactory<Trigger>
 {
-    public Trigger Create(Diagram diagram, string input)
+    public Trigger Create(string input)
     {
         string pattern = @"TRIGGER\s+(\w+)\s+""([^""]+)"";";
         Match match = Regex.Match(input, pattern);

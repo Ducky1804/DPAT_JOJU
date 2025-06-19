@@ -7,7 +7,7 @@ namespace Loading.Factory;
 
 public class TransitionFactory : IFactory<Transition>
 {
-    public Transition Create(Diagram diagram, string input)
+    public Transition Create(string input)
     {
         string pattern = @"^TRANSITION\s+" +
                          @"(?<id>\S+)\s+" +
@@ -22,21 +22,18 @@ public class TransitionFactory : IFactory<Transition>
         {
             throw new ArgumentException("Input does not match expected TRANSITION format: " + input);
         }
-
+        
         string id = match.Groups["id"].Value;
         string source = match.Groups["source"].Value;
         string destination = match.Groups["destination"].Value;
-
         string triggerName = match.Groups["trigger"].Success ? match.Groups["trigger"].Value : null;
-        Maybe<Trigger> trigger = string.IsNullOrEmpty(triggerName) ? Maybe<Trigger>.None() : diagram.GetTrigger(triggerName);
-
         string guard = match.Groups["guard"].Value;
 
         return new TransitionBuilder()
             .SetId(id)
             .SetSource(source)
             .SetDestination(destination)
-            .SetTrigger(trigger.ValueOrDefault())
+            .SetTriggerName(triggerName)
             .SetGuard(guard)
             .Build();
     }

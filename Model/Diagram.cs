@@ -46,4 +46,34 @@ public class Diagram
         
         return Maybe<Trigger>.None();
     }
+
+    public Maybe<Transition> GetTransition(string? transitionId)
+    {
+        if (transitionId == null) return Maybe<Transition>.None();
+
+        foreach (var state in States)
+        {
+            var result = FindTransitionRecursive(state, transitionId);
+            if (result.HasValue) return result;
+        }
+
+        return Maybe<Transition>.None();
+    }
+
+    private Maybe<Transition> FindTransitionRecursive(State.State state, string transitionId)
+    {
+        foreach (var transition in state.Transitions)
+        {
+            if (transition.Id == transitionId)
+                return Maybe<Transition>.Of(transition);
+        }
+
+        foreach (var child in state.Children)
+        {
+            var result = FindTransitionRecursive(child, transitionId);
+            if (result.HasValue) return result;
+        }
+
+        return Maybe<Transition>.None();
+    }
 }

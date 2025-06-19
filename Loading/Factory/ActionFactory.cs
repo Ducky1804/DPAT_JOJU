@@ -7,7 +7,7 @@ namespace Loading.Factory;
 
 public class ActionFactory : IFactory<Action>
 {
-    public Action Create(Diagram diagram, string input)
+    public Action Create(string input)
     {
         Regex ActionRegex = new Regex(
             @"^ACTION\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+""([^""]*)""\s*:\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*;$",

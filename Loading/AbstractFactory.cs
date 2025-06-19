@@ -1,7 +1,9 @@
 using Loading.Factory;
 using Model;
 using System.Reflection;
+using Loading.Builder;
 using Loading.Reader;
+using Model.Enums;
 using Model.State;
 using Model.Utils;
 using Action = Model.Action;
@@ -27,10 +29,7 @@ public class AbstractFactory
 
     public Diagram CreateDiagram(string name, string content)
     {
-        var diagram = new Diagram()
-        {
-            Name = name,
-        };
+        DiagramBuilder builder = new DiagramBuilder(name);
 
         List<string> filteredLines = _reader.ReadFile(content);
         foreach (string line in filteredLines)
@@ -44,41 +43,27 @@ public class AbstractFactory
             if (_factories.TryGetValue(keyword, out Type factoryType))
             {
                 var factoryInstance = Activator.CreateInstance(factoryType);
-                var createMethod = factoryType.GetMethod("Create", new[] { typeof(Diagram), typeof(string) });
+                var createMethod = factoryType.GetMethod("Create", new[] { typeof(string) });
                 if (createMethod == null)
                     throw new InvalidOperationException(
                         $"Factory {factoryType.Name} heeft geen juiste Create methode.");
 
-                var createdObject = createMethod.Invoke(factoryInstance, new object[] { diagram, line });
+                var createdObject = createMethod.Invoke(factoryInstance, new object[] { line });
+                
+                if(createdObject is State state)
+                    builder.AddState(state);
                 
                 if (createdObject is Trigger trigger)
-                {
-                    diagram.Triggers.Add(trigger);
-                }
+                    builder.AddTrigger(trigger);
 
                 if (createdObject is Action action)
-                {
-                    Maybe<State> maybeState = diagram.GetState(action.Id);
-                    if (maybeState.HasValue)
-                    {
-                        if (action.Type == "ENTRY_ACTION")
-                            maybeState.ValueOrDefault().OnEntry = action;
-                                
-                        if(action.Type == "EXIT_ACTION")        
-                            maybeState.ValueOrDefault().OnExit = action;
-                    }
-                }
-
-                if (createdObject is Transition transition)
-                {
-                    Maybe<State> maybeState = diagram.GetState(transition.Source);
-                    
-                    if (maybeState.HasValue)
-                        maybeState.ValueOrDefault().Transitions.Add(transition);
-                }
+                    builder.AddAction(action);
+                
+                if(createdObject is Transition transition)
+                    builder.AddTransition(transition);
             }
         }
 
-        return diagram;
+        return builder.Build();
     }
 }

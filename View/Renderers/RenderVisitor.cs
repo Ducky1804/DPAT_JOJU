@@ -52,5 +52,5 @@ public class RenderVisitor : IVisitor
     {
         string content = new TransitionRenderer().Render(transition);
         new ConsolePrinter().Print(content);
-    }
+}
 }
