@@ -65,6 +65,7 @@ public class DiagramBuilder(string name) : IBuilder<Diagram>
         }
         else
         {
+            Console.WriteLine("ADDING");
             diagram.States.Add(state);
         }
 

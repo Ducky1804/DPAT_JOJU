@@ -13,11 +13,9 @@ namespace Loading;
 public class FactoryDispatcher
 {
     private readonly Dictionary<string, Type> _factories;
-    private readonly IFileReader _reader;
 
-    public FactoryDispatcher(IFileReader fileReader)
+    public FactoryDispatcher()
     {
-        _reader = fileReader;
         _factories = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
         {
             { "STATE", typeof(StateFactory) },
