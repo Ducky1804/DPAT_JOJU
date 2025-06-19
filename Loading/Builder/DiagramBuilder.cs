@@ -85,6 +85,9 @@ public class DiagramBuilder(string name) : IBuilder<Diagram>
                                 
             if(action.Type == ActionType.ExitAction)        
                 maybeState.ValueOrDefault().OnExit = action;
+
+            if (action.Type == ActionType.DoAction)
+                maybeState.ValueOrDefault().OnDo = action;
         }
 
         if (action.Type == ActionType.TransitionAction)

@@ -4,6 +4,7 @@ public enum ActionType
 {
     EntryAction,
     ExitAction,
+    DoAction,
     TransitionAction
 }
 
@@ -15,6 +16,7 @@ public static class ActionTypeExtensions
         {
             "ENTRY_ACTION" => ActionType.EntryAction,
             "EXIT_ACTION" => ActionType.ExitAction,
+            "DO_ACTION" => ActionType.DoAction,
             _ => ActionType.TransitionAction
         };
     }

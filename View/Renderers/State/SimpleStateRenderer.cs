@@ -13,6 +13,9 @@ public class SimpleStateRenderer : IRenderer<SimpleState>
         if (state.OnEntry != null)
             description = new ActionRenderer().Render(state.OnEntry);
 
+        if (state.OnDo != null)
+            description += "\r\n" + new ActionRenderer().Render(state.OnDo);
+        
         if (state.OnExit != null)
             description += "\r\n" + new ActionRenderer().Render(state.OnExit);
 
