@@ -21,4 +21,14 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\View\View.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Moq">
+        <HintPath>..\..\..\.nuget\packages\moq\4.20.72\lib\net6.0\Moq.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
