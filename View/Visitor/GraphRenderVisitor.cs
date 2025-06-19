@@ -58,6 +58,7 @@
 using Model;
 using View;
 using View.Diagram;
+using View.Diagram.Action;
 using View.Factory;
 using Action = Model.Action;
 
@@ -67,22 +68,22 @@ public class GraphRenderVisitor : RenderVisitor
 
     protected override string Render(SimpleState state)
     {
-        return _renderFactory.CreateStateRenderer<SimpleState>(state.GetType()).Render(state);
+        return _renderFactory.CreateStateRenderer<SimpleState>(state, state.GetType()).Render(state);
     }
 
     protected override string Render(InitialState state)
     {
-        return _renderFactory.CreateStateRenderer<InitialState>(state.GetType()).Render(state);
+        return _renderFactory.CreateStateRenderer<InitialState>(state, state.GetType()).Render(state);
     }
 
     protected override string Render(FinalState state)
     {
-        return _renderFactory.CreateStateRenderer<FinalState>(state.GetType()).Render(state);
+        return _renderFactory.CreateStateRenderer<FinalState>(state, state.GetType()).Render(state);
     }
 
     protected override string Render(CompoundState state)
     {
-        return _renderFactory.CreateStateRenderer<CompoundState>(state.GetType()).Render(state);
+        return _renderFactory.CreateStateRenderer<CompoundState>(state, state.GetType()).Render(state);
     }
 
     protected override string Render(Trigger trigger)
@@ -92,7 +93,7 @@ public class GraphRenderVisitor : RenderVisitor
 
     protected override string Render(Action action)
     {
-        throw new NotImplementedException();
+        return new ActionRenderer().Render(action);
     }
 
     protected override string Render(Transition transition)

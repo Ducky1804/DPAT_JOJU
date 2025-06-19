@@ -12,7 +12,6 @@ public class StateDiagramRenderer
         string header = new HeaderRenderer().Render(t.Name);
         new BoxedContentPrinter(ConsoleColor.Yellow).Print(header);
 
-        
         List<string> content = new();
         foreach (var state in t.States)
         {
@@ -29,7 +28,7 @@ public class StateDiagramRenderer
         }
         
         new ConsolePrinter().PrintLines(content);
-        return "";
+        return string.Join("\r\n", content);
     }
 
 }

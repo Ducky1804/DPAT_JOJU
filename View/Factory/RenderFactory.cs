@@ -32,7 +32,7 @@ public class RenderFactory
         _renderers.Add(typeof(CompoundState), new CompoundStateRenderer());
     }
 
-    public IRenderer<T> CreateStateRenderer<T>(Type type)
+    public IRenderer<T>? CreateStateRenderer<T>(T t, Type type)
     {
         if (_renderers.TryGetValue(type, out var renderer))
         {

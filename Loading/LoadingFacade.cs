@@ -9,12 +9,7 @@ public class LoadingFacade
     
     public Diagram CreateDiagram(string name, string content)
     {
-        List<string> lines = _reader.ReadFile(content);
-        foreach (var line in lines)
-        {
-            Console.WriteLine(line);
-        }
-
-        return new Diagram();
+        AbstractFactory factory = new AbstractFactory(_reader);
+        return factory.CreateDiagram(name, content);
     }
 }

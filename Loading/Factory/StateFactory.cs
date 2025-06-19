@@ -27,6 +27,7 @@ public class StateFactory : IFactory<State>
         StateBuilder builder = new();
         builder.SetId(id)
             .SetName(name)
+            .SetParent(parent)
             .SetType(type);
 
         return builder.Build();
