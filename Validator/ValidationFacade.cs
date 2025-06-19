@@ -17,7 +17,6 @@ public class ValidationFacade
 
     public bool ValidateDiagram(Diagram diagram)
     {
-        return true;
-        //return _handler.Handle(diagram);
+        return _handler.Handle(diagram);
     }
 }

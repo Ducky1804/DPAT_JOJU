@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loading", "Loading\Loading.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{05014BEF-B3CC-4261-8BE7-1A7784DA07D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatorTest", "ValidatorTest\ValidatorTest.csproj", "{086ED72C-371E-4013-AAA1-FCD0A53FCE0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{05014BEF-B3CC-4261-8BE7-1A7784DA07D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05014BEF-B3CC-4261-8BE7-1A7784DA07D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05014BEF-B3CC-4261-8BE7-1A7784DA07D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{086ED72C-371E-4013-AAA1-FCD0A53FCE0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{086ED72C-371E-4013-AAA1-FCD0A53FCE0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{086ED72C-371E-4013-AAA1-FCD0A53FCE0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{086ED72C-371E-4013-AAA1-FCD0A53FCE0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

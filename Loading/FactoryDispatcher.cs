@@ -10,12 +10,12 @@ using Action = Model.Action;
 
 namespace Loading;
 
-public class AbstractFactory
+public class FactoryDispatcher
 {
     private readonly Dictionary<string, Type> _factories;
     private readonly IFileReader _reader;
 
-    public AbstractFactory(IFileReader fileReader)
+    public FactoryDispatcher(IFileReader fileReader)
     {
         _reader = fileReader;
         _factories = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
@@ -27,12 +27,11 @@ public class AbstractFactory
         };
     }
 
-    public Diagram CreateDiagram(string name, string content)
+    public Diagram CreateDiagram(string name, List<string> content)
     {
         DiagramBuilder builder = new DiagramBuilder(name);
-
-        List<string> filteredLines = _reader.ReadFile(content);
-        foreach (string line in filteredLines)
+        
+        foreach (string line in content)
         {
             var tokens = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (tokens.Length == 0)

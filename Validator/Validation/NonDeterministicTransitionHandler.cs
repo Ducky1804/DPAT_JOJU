@@ -7,24 +7,33 @@ public class NonDeterministicTransitionHandler : BaseValidationHandler
 {
     protected override bool PerformValidation(Diagram diagram)
     {
-        var transitionsPerSource = diagram.Transitions
+        var allTransitions = diagram.States
+            .SelectMany(state =>
+                state.Transitions.Select(t => new
+                {
+                    Source = state.Id,
+                    TriggerId = t.Trigger?.Id?.Trim().ToLowerInvariant() ?? "",
+                    GuardKey = string.IsNullOrWhiteSpace(t.Guard) ? "true" : t.Guard.Trim().ToLowerInvariant()
+                })
+            );
+
+        var transitionsBySource = allTransitions
             .GroupBy(t => t.Source);
 
-        foreach (var group in transitionsPerSource)
+        foreach (var group in transitionsBySource)
         {
-            var duplicateTriggers = group
-                .GroupBy(t => new
-                {
-                    Trigger = (t.Trigger?.Description ?? "").Trim().ToLowerInvariant(),
-                    Guard = (t.Guard ?? "").Trim().ToLowerInvariant()
-                })
-                .Where(g => g.Count() > 1);
+            var seen = new HashSet<(string triggerId, string guardKey)>();
 
-            foreach (var dup in duplicateTriggers)
+            foreach (var t in group)
             {
-                throw new ValidationException(
-                    $"Non-deterministic transitions found in state '{group.Key}' with trigger '{dup.Key.Trigger}' and guard '{dup.Key.Guard}'"
-                );
+                var key = (t.TriggerId, t.GuardKey);
+
+                if (!seen.Add(key))
+                {
+                    throw new ValidationException(
+                        $"Non-deterministic transitions found in state '{t.Source}' with trigger '{t.TriggerId}' and guard '{t.GuardKey}'"
+                    );
+                }
             }
         }
 

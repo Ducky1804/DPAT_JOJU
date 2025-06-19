@@ -1,6 +1,7 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using Model;
+﻿using Model;
 using Model.State;
+using System.Collections.Generic;
+using System.Linq;
 using Validator.Exceptions;
 
 namespace Validator.Validation;
@@ -9,51 +10,53 @@ public class UnreachableStateHandler : BaseValidationHandler
 {
     protected override bool PerformValidation(Diagram diagram)
     {
-        List<State> allStates = GetAllStates(diagram.States);
-        List<Transition> transitions = diagram.Transitions;
-        List<State> reachedStates = new();
+        List<State> states = diagram.States;
 
-        foreach (Transition transition in transitions)
+        var unreachableStates = states
+            .Where(s => s is not CompoundState and not InitialState and not FinalState && !IsReachable(states, s))
+            .ToList();
+
+        if (unreachableStates.Any())
         {
-            State? source = diagram.GetState(transition.Source).ValueOrDefault();
-            State? destination = diagram.GetState(transition.Destination).ValueOrDefault();
-
-            if (source != null && !IsStateInList(reachedStates, source))
-                reachedStates.Add(source);
-
-            if (destination != null && !IsStateInList(reachedStates, destination))
-                reachedStates.Add(destination);
+            var unreachableIds = string.Join(", ", unreachableStates.Select(s => s.Id));
+            throw new ValidationException($"The FSM in this file is invalid. State(s) {unreachableIds} are unreachable");
         }
-
-        bool hasUnreachableStates = allStates.Count > reachedStates.Count;
-
-        if (hasUnreachableStates)
-            throw new ValidationException("Diagram has unreachable states!");
 
         return true;
     }
 
-    private bool IsStateInList(List<State> states, State state)
+    private bool IsReachable(List<State> allStates, State target)
     {
-        return states.Any(s => s.Id == state.Id);
-    }
+        var relevantStates = new List<State> { target };
+        relevantStates.AddRange(GetParentStates(target, allStates));
 
-    private List<State> GetAllStates(List<State> diagramStates)
-    {
-        List<State> result = new();
-
-        void Traverse(State state)
+        foreach (var state in allStates)
         {
-            result.Add(state);
-            foreach (var child in state.Children)
+            foreach (var transition in state.Transitions)
             {
-                Traverse(child);
+                if (relevantStates.Any(rs => rs.Id == transition.Destination))
+                {
+                    return true;
+                }
             }
         }
 
-        foreach (var state in diagramStates)
+        return false;
+    }
+
+    private List<State> GetParentStates(State state, List<State> allStates)
+    {
+        var result = new List<State>();
+        var current = state;
+
+        while (!string.IsNullOrEmpty(current.Parent))
         {
-            Traverse(state);
+            var parent = allStates.FirstOrDefault(s => s.Id == current.Parent);
+            if (parent == null)
+                break;
+
+            result.Add(parent);
+            current = parent;
         }
 
         return result;

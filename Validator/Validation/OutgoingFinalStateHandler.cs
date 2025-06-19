@@ -9,17 +9,28 @@ public class OutgoingFinalStateHandler : BaseValidationHandler
 {
     protected override bool PerformValidation(Diagram diagram)
     {
-        foreach (var transition in diagram.Transitions)
+        foreach (var diagramState in diagram.States)
         {
-            Maybe<State> maybeSource = diagram.GetState(transition.Source);
-            
-            if (!maybeSource.HasValue) continue;
-
-            State maybe = maybeSource.ValueOrDefault();
-
-            if (maybe is FinalState) throw new ValidationException("final state cannot have outgoing transitions!");
+            foreach (var state in GetAllSubStates(diagramState))
+            {
+                if (state is FinalState && (state.Children.Count != 0 || state.Transitions.Count != 0))
+                    throw new ValidationException("Final states cannot have outgoing transitions!");
+            }
         }
 
         return true;
     }
+    
+    private List<State> GetAllSubStates(State state)
+    {
+        var result = new List<State> { state };
+
+        foreach (var child in state.Children)
+        {
+            result.AddRange(GetAllSubStates(child));
+        }
+
+        return result;
+    }
+
 }

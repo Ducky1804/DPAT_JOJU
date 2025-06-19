@@ -7,9 +7,10 @@ public class LoadingFacade
 {
     private IFileReader _reader = new FsmFileReader();
     
-    public Diagram CreateDiagram(string name, string content)
+    public Diagram CreateDiagram(string name, string file)
     {
-        AbstractFactory factory = new AbstractFactory(_reader);
-        return factory.CreateDiagram(name, content);
+        FactoryDispatcher factoryDispatcher = new FactoryDispatcher(_reader);
+        List<string> content = _reader.ReadFile(file);
+        return factoryDispatcher.CreateDiagram(name, content);
     }
 }
