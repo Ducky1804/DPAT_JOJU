@@ -2,7 +2,7 @@
 
 public class Menu
 {
-    public String Title { get; set; }
+    public string Title { get; set; }
     public ConsoleColor Color { get; set; }
 }
 

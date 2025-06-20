@@ -4,8 +4,8 @@ namespace Loading.Builder;
 
 public class TriggerBuilder : IBuilder<Trigger>
 {
-    private String _id;
-    private String _description;
+    private string _id;
+    private string _description;
 
     public TriggerBuilder SetId(string id)
     {

@@ -7,20 +7,8 @@ namespace View.Factory;
 
 public class RenderFactory
 {
-    private static RenderFactory? _instance = null;
-
-    public static RenderFactory Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new RenderFactory();
-            }
-
-            return _instance;
-        }
-    }
+    private static readonly RenderFactory _instance = new RenderFactory();
+    public static RenderFactory Instance => _instance;
 
     private Dictionary<Type, IRenderer> _renderers = new();
 

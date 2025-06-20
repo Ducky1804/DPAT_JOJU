@@ -35,7 +35,7 @@ public class TransitionBuilder : IBuilder<Transition>
         return this;
     }
 
-    public TransitionBuilder SetTriggerName(String name)
+    public TransitionBuilder SetTriggerName(string name)
     {
         _triggerName = name;
         return this;

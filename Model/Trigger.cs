@@ -7,7 +7,7 @@ public class Trigger : Identifiable
         Description = description;
     }
 
-    public String Description { get; set; }
+    public string Description { get; set; }
     
     public override string ToString()
     {

@@ -2,5 +2,5 @@
 
 public interface IInputReader
 {
-    String ReadInput();
+    string ReadInput();
 }

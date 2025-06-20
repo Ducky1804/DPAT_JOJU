@@ -6,7 +6,7 @@ public class BoxedContentPrinter(ConsoleColor color = ConsoleColor.White) : Cons
 {
     public override void Print(string content)
     {
-        List<String> lines = new Rectangle().DrawConsoleRectangle(content);
+        List<string> lines = new Rectangle().DrawConsoleRectangle(content);
         
         foreach (var line in lines)
         {

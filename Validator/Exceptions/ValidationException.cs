@@ -2,7 +2,7 @@
 
 public class ValidationException : Exception
 {
-    public ValidationException(string message) : base("An validation error occurred: " + message)
+    public ValidationException(string message) : base("A validation error occurred: " + message)
     {
     }
 }
