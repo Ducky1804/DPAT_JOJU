@@ -2,7 +2,7 @@
 
 public abstract class Describable : Identifiable
 {
-    public String Description { get; set; }
+    public string Description { get; set; }
     
     protected Describable(string id, string description) : base(id)
     {

@@ -9,10 +9,10 @@ public class ActionFactory : IFactory<Action>
 {
     public Action Create(string input)
     {
-        Regex ActionRegex = new Regex(
+        Regex actionRegex = new Regex(
             @"^ACTION\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+""([^""]*)""\s*:\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*;$",
             RegexOptions.Compiled);
-        var match = ActionRegex.Match(input);
+        var match = actionRegex.Match(input);
 
         if (!match.Success)
         {

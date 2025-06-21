@@ -111,7 +111,7 @@ public class DiagramBuilder(string name) : IBuilder<Diagram>
         {
             maybeState.ValueOrDefault().Transitions.Add(transition);
 
-            String? triggerName = transition.TriggerName;
+            string? triggerName = transition.TriggerName;
             if (!string.IsNullOrEmpty(triggerName))
             {
                 Maybe<Trigger> trigger = string.IsNullOrEmpty(triggerName) ? Maybe<Trigger>.None() : diagram.GetTrigger(triggerName);

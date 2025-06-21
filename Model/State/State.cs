@@ -2,7 +2,7 @@ namespace Model.State;
 
 public abstract class State : Nameable
 {
-    public String Parent { get; set; } = "_";
+    public string Parent { get; set; } = "_";
     public List<State> Children { get; } = new();
     public List<Transition> Transitions { get; } = new();
     public Action? OnEntry { get; set; }

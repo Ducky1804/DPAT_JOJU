@@ -1,6 +1,6 @@
 ﻿namespace DPAT_JOJU.Commands;
 
-public class FileReadCommand(string file) : ICommand<String>
+public class FileReadCommand(string file) : ICommand<string>
 {
     public string Execute()
     {

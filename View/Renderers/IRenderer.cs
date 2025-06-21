@@ -7,5 +7,5 @@ public interface IRenderer
 }
 public interface IRenderer<in T> : IRenderer
 { 
-    String Render(T t);
+    string Render(T t);
 }

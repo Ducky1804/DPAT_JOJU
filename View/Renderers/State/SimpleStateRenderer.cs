@@ -26,6 +26,6 @@ public class SimpleStateRenderer : IRenderer<SimpleState>
             content.Add(new TransitionRenderer().Render(trans));
         }
         
-        return String.Join("\r\n", content);
+        return string.Join("\r\n", content);
     }
 }

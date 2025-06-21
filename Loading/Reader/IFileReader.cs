@@ -2,5 +2,5 @@
 
 public interface IFileReader
 {
-    List<String> ReadFile(string file);
+    List<string> ReadFile(string file);
 }
