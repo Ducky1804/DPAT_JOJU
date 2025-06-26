@@ -4,6 +4,13 @@ public class ConsolePrinter(ConsoleColor color = ConsoleColor.White) : IPrinter
 {
     public virtual void Print(string content)
     {
+        bool HasConsole =
+            !Console.IsOutputRedirected &&
+            !Console.IsInputRedirected &&
+            !Console.IsErrorRedirected;
+
+        if (!HasConsole) return;
+        
         var previousColor = Console.ForegroundColor;
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         int x = (Console.WindowWidth - content.Length) / 2;
@@ -17,6 +24,13 @@ public class ConsolePrinter(ConsoleColor color = ConsoleColor.White) : IPrinter
 
     public void PrintLines(List<string> lines, bool centerVertically = true)
     {
+        bool HasConsole =
+            !Console.IsOutputRedirected &&
+            !Console.IsInputRedirected &&
+            !Console.IsErrorRedirected;
+
+        if (!HasConsole) return;
+        
         var previousColor = Console.ForegroundColor;
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
